@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class LocomotionWalking : MonoBehaviour
 {
-    public float walkingSpeed = 0.5f;
+    [Range(0f, 0.3f)]
+    public float walkingSpeed = 0.15f; // speed of overall movement with 0.15 being close to walking speed
+    [Range(0f, 1f)]
+    public float strafeSpeed = 0.5f; // speed of side-to-side movement as a percentage of walkingSpeed
 
     // Use this for initialization
     void Start()
@@ -16,7 +19,7 @@ public class LocomotionWalking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GvrController.ClickButton)
+        if (GvrController.IsTouching)
         {
             Walk();
         }
@@ -24,7 +27,15 @@ public class LocomotionWalking : MonoBehaviour
 
     private void Walk()
     {
-        Vector3 velocity = new Vector3(0f, 0f, walkingSpeed);
-        transform.position += Camera.main.transform.forward;
+        Vector2 touchCoords = GvrController.TouchPos;   // gather user thumb position
+
+        if (touchCoords.x > 0.6f || // don't transform if user thumb is relatively centered
+            touchCoords.x < 0.4f ||
+            touchCoords.y > 0.6f ||
+            touchCoords.y < 0.4f )
+        {
+            transform.position += Camera.main.transform.forward * (-touchCoords.y + 0.5f) * walkingSpeed;
+            transform.position += Camera.main.transform.right * (touchCoords.x - 0.5f) * walkingSpeed * strafeSpeed;
+        }
     }
 }
