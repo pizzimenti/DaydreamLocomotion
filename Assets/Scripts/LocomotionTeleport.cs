@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class LocomotionTeleport : MonoBehaviour
 {
-    public float teleportRange = 100.0f;
-    public GameObject teleportTarget;
+    public float teleportRange = 75.0f;
+    public GameObject teleportTargetPrefab;
+    private GameObject teleportTarget;
 
     private LineRenderer laser;
     private Vector3 beamOrigin;
@@ -14,7 +15,7 @@ public class LocomotionTeleport : MonoBehaviour
 
     private Vector3 targetPosition;
     private bool isTeleportable;
-
+    private bool isInstantiatedTeleportPrefab;
 
     // Use this for initialization
     void Start()
@@ -45,6 +46,8 @@ public class LocomotionTeleport : MonoBehaviour
     private void TeleportEngage()
     {
         laser.enabled = false;
+        Destroy(teleportTarget);
+        isInstantiatedTeleportPrefab = false;
         if (isTeleportable) transform.position = targetPosition;
     }
 
@@ -75,18 +78,27 @@ public class LocomotionTeleport : MonoBehaviour
         if (!laser.enabled) laser.enabled = true;   // If line renderer is not already on, enable it
         if (isTeleportable)
         {
-            laser.startColor = Color.green; // Set the laser color to green when it is striking a valid teleport destination
+            laser.startColor = Color.green;
             laser.endColor = Color.green;
+            if (!isInstantiatedTeleportPrefab)
+            {
+                teleportTarget = Instantiate(teleportTargetPrefab);
+                isInstantiatedTeleportPrefab = true;
+            }
+            teleportTarget.transform.position = targetPosition + new Vector3(0, 1, 0);
         }
-        else
+        else // Beam is either striking a non-terrain object or is striking nothing
         {
-            laser.startColor = Color.red; // Set the laser color to red when it is NOT striking a valid teleport destination
+            laser.startColor = Color.red;
             laser.endColor = Color.red;
+            if (isInstantiatedTeleportPrefab)
+            {
+                Destroy(teleportTarget);
+                isInstantiatedTeleportPrefab = false;
+            }
         }
 
-        //targetPosition = beamOrigin + (teleportRange * beamDirection);
         laser.SetPosition(0, beamOrigin);
         laser.SetPosition(1, targetPosition);
-
     }
 }
