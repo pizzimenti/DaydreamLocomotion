@@ -8,7 +8,7 @@ public class LocomotionWalking : MonoBehaviour
     [Range(0f, 0.3f)]
     public float walkingSpeed = 0.15f; // speed of overall movement with 0.15 being close to walking speed
     [Range(0f, 1f)]
-    public float strafeSpeed = 0.5f; // speed of side-to-side movement as a percentage of walkingSpeed
+    public float strafeSpeed = 0.75f; // speed of side-to-side movement as a percentage of walkingSpeed
 
     // Use this for initialization
     void Start()
@@ -19,10 +19,8 @@ public class LocomotionWalking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GvrController.IsTouching)
-        {
-            Walk();
-        }
+        if (GvrController.ClickButton) return;  // Prevents walking while user prepares to teleport
+        if (GvrController.IsTouching)  Walk();
     }
 
     private void Walk()
