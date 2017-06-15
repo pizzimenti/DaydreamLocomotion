@@ -6,8 +6,9 @@ using UnityEngine;
 public class LocomotionTeleport : MonoBehaviour
 {
     public float teleportRange = 50.0f;
-    private LineRenderer laser;
+    public GameObject teleportTarget;
 
+    private LineRenderer laser;
     private Vector3 beamOrigin;
     private Vector3 beamDirection;
 
@@ -59,7 +60,7 @@ public class LocomotionTeleport : MonoBehaviour
             GameObject targetObject = raycastHit.transform.gameObject;
             if (targetObject.tag == "Terrain") isTeleportable = true;
             else { isTeleportable = false; }
-            return raycastHit.transform.position;
+            return raycastHit.point;
         }
         else { return beamOrigin + (teleportRange * beamDirection); }
     }
