@@ -10,12 +10,6 @@ public class LocomotionWalking : MonoBehaviour
     [Range(0f, 1f)]
     public float strafeSpeed = 0.75f; // speed of side-to-side movement as a percentage of walkingSpeed
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -27,7 +21,7 @@ public class LocomotionWalking : MonoBehaviour
     {
         Vector2 touchCoords = GvrController.TouchPos;   // gather user thumb position
 
-        if (touchCoords.x > 0.6f || // don't transform if user thumb is relatively centered
+        if (touchCoords.x > 0.6f || // don't move if user thumb is relatively centered
             touchCoords.x < 0.4f ||
             touchCoords.y > 0.6f ||
             touchCoords.y < 0.4f )
