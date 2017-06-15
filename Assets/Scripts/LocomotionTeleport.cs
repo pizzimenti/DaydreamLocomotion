@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LocomotionTeleport : MonoBehaviour
 {
-    public float teleportRange = 50.0f;
+    public float teleportRange = 100.0f;
     public GameObject teleportTarget;
 
     private LineRenderer laser;
@@ -45,7 +45,7 @@ public class LocomotionTeleport : MonoBehaviour
     private void TeleportEngage()
     {
         laser.enabled = false;
-        transform.position = targetPosition;
+        if (isTeleportable) transform.position = targetPosition;
     }
 
 
