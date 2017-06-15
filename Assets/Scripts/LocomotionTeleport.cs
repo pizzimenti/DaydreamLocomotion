@@ -59,10 +59,14 @@ public class LocomotionTeleport : MonoBehaviour
         {
             GameObject targetObject = raycastHit.transform.gameObject;
             if (targetObject.tag == "Terrain") isTeleportable = true;
-            else { isTeleportable = false; }
+            else isTeleportable = false;
             return raycastHit.point;
         }
-        else { return beamOrigin + (teleportRange * beamDirection); }
+        else
+        {
+            isTeleportable = false;
+            return beamOrigin + (teleportRange * beamDirection);
+        }
     }
 
     // Render laser beam
